@@ -1,12 +1,10 @@
 {
   "name": "@pogh/pdf-viewer",
-  "description": "A prototype pdf-viewer web component made in typescript using pdfjs.",
+  "description": "A prototype pdf-viewer web component made from pdfjs.",
   "version": "0.1.0",
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "scripts": {
-    "start": "webpack-dev-server --config=./webpack-dev.config.js --mode=development",
-    "build": "echo 'ERROR: build process not created...' && exit 1",
-    "test": "echo 'ERROR: test process not created...' && exit 1"
+    "test": "echo 'ERR: test process not created...' && exit 1"
   },
   "repository": {
     "type": "git",
@@ -17,25 +15,21 @@
     "viewer",
     "pogh"
   ],
-  "author": "Patrick Ortiz (github: pzychotis)",
+  "author": "Patrick Ortiz",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/pzychotis/pdf-viewer/issues"
   },
   "homepage": "https://github.com/pzychotis/pdf-viewer#readme",
+  "directories": {
+    "utils": "src/utils",
+    "components": "src/components"
+  },
   "devDependencies": {
     "chai": "^5.1.1",
-    "css-loader": "^7.1.2",
-    "html-loader": "^5.0.0",
-    "html-webpack-plugin": "^5.6.0",
-    "mocha": "^10.5.1",
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.5.2",
-    "webpack": "^5.92.1",
-    "webpack-cli": "^5.1.4",
-    "webpack-dev-server": "^5.0.4"
+    "mocha": "^10.6.0"
   },
   "dependencies": {
-    "pdfjs-dist": "^4.3.136"
+    "pdfjs-dist": "^4.4.168"
   }
 }
