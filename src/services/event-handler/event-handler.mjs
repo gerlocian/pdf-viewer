@@ -1,4 +1,4 @@
-module.exports.EventHandler = class EventHandler {
+export class EventHandler {
     static events = {};
 
     static emit(event, params) {
@@ -15,7 +15,7 @@ module.exports.EventHandler = class EventHandler {
     }
 }
 
-module.exports.EventType = Object.defineProperties({}, {
+export const EventType = Object.defineProperties({}, {
     PdfLoaded:      { value: 'pdf-loaded'   },
     PagesLoaded:    { value: 'pages-loaded' },
 });

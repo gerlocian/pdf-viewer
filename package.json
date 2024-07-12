@@ -4,6 +4,7 @@
   "version": "0.1.0",
   "main": "src/index.js",
   "scripts": {
+    "start:dev": "http-server -o src/example",
     "test": "echo 'ERR: test process not created...' && exit 1"
   },
   "repository": {
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "chai": "^5.1.1",
+    "http-server": "^14.1.1",
     "mocha": "^10.6.0"
   },
   "dependencies": {
