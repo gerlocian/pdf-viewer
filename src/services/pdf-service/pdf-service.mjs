@@ -1,5 +1,7 @@
-import { getDocument } from 'pdfjs-dist';
-// import { EventHandler, EventType } from 'services/event-handler/event-handler';
+import { getDocument, GlobalWorkerOptions } from 'pdfjs-dist';
+import { EventHandler, EventType } from '../event-handler/event-handler.mjs';
+
+GlobalWorkerOptions.workerSrc = new URL('pdfjs-dist/build/pdf.worker.mjs', import.meta.url).toString();
 
 export class PdfService {
     #href;
@@ -19,11 +21,15 @@ export class PdfService {
         this.#resetPdf();
     }
 
+    async getDisplayAnnotationsForPage(pageNumber) {
+        return await this.getPage(1).getAnnotations({ intent: 'display' });
+    }
+
     getPage(pageNumber) {
         return this.#pages[this.#validatePageNumber(pageNumber) - 1];
     }
 
-    getViewportForPage(pageNumber, scale = 1.0) {
+    getViewportForPage(pageNumber, scale = 2.0) {
         return this.getPage(pageNumber).getViewport({ scale });
     }
 
@@ -41,7 +47,7 @@ export class PdfService {
         const viewport = this.getViewportForPage(pageNumber);
         const context = canvas.getContext('2d');
         const transform = this.#scale !== 1 ? [this.#scale, 0, 0, this.#scale, 0, 0] : null;
-        const renderContext = { canvasContext: context, transform, viewport };
+        const renderContext = { canvasContext: context, transform, viewport, intent: 'any', isEditing: true };
 
         canvas.width = Math.floor(viewport.width * this.#scale);
         canvas.height = Math.floor(viewport.height * this.#scale);
@@ -58,18 +64,19 @@ export class PdfService {
     async #processPDF() {
         let promises = [];
 
-        this.#pdf = await getDocument(this.#href).promise;
+        this.#pdf = await getDocument({ url: this.#href, enableXfa: true }).promise;
         this.#totalPages = this.#pdf.numPages;
+        EventHandler.emit(EventType.PdfLoaded);
 
         for(let index = 0; index < this.#totalPages; index++) {
             promises = [...promises, this.#loadPage(index + 1)];
         }
-
         this.#pages = await Promise.all(promises);
+        EventHandler.emit(EventType.PagesLoaded);
     }
 
     #resetPdf() {
-        if (this.#pages?.length !== 0) this.#pages.forEach(page => page.cleanup());
+        if (this.#pages?.length !== 0) this.#pages?.forEach(page => page.cleanup());
         this.#pdf?.cleanup();
 
         this.#pages = [];
